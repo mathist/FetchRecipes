@@ -1,5 +1,15 @@
 import Foundation
 
+struct Recipe: Codable {
+    var cuisine: String
+    var name: String
+    var photo_url_large: String
+    var photo_url_small: String
+    var source_url: String?
+    var uuid: String
+    var youtube_url: String?
+}
+
 struct RecipeData: Codable {
     var recipes: [Recipe]
     
@@ -42,14 +52,3 @@ struct RecipeData: Codable {
     }
     
 }
-
-struct Recipe: Codable {
-    var cuisine: String
-    var name: String
-    var photo_url_large: String
-    var photo_url_small: String
-    var source_url: String?
-    var uuid: String
-    var youtube_url: String?
-}
-
