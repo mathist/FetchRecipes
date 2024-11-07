@@ -4,23 +4,30 @@ import UIKit
 class RecipeController {
     
     static let shared = RecipeController()
-    let recipesPath: String = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes.json"
+    static let recipesPath: String = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes.json"
+    static let malformedRecipePath: String = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes-malformed.json"
+    static let emptyRecipePath: String = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes-empty.json"
+    
     var recipes: [Recipe] = []
     
     init() {
     }
     
-    func fetchRecipes() async {
-        if let url = URL(string: recipesPath) {
+    func fetchRecipes(recipePath: String) async -> Result<[Recipe], Error> {
+        if let url = URL(string: recipePath) {
             do {
-                if let recipeData = try await recipeData(url: url) {
-                    if let recipes = try parseRecipeData(recipeData: recipeData) {
-                        self.recipes = recipes
-                    }
+                let recipeData = try await recipeData(url: url)
+                if let recipes = try parseRecipeData(recipeData: recipeData) {
+                    self.recipes = recipes
+                    return .success(self.recipes)
+                } else {
+                    return .failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "JSON not valid"]) as Error)
                 }
             } catch {
-                print(error)
+                return .failure(error)
             }
+        } else {
+            return .failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "URL not valid"]) as Error)
         }
     }
     
@@ -30,16 +37,13 @@ class RecipeController {
        }
      }
     
-    func recipeData(url: URL) async throws -> Data? {
-        var recipeData: Data?
-        
+    func recipeData(url: URL) async throws -> Data {
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            recipeData = data
+            return data
         } catch {
             throw error
         }
-        return recipeData
     }
 
     func parseRecipeData(recipeData: Data) throws -> [Recipe]? {
@@ -53,22 +57,20 @@ class RecipeController {
     }
     
     func image(url: URL) async throws -> UIImage? {
-        var uiImage: UIImage?
-        
-          do {
+        do {
             if let cachedImage = ImageCache.shared.getImage(url: url) {
-              uiImage = cachedImage
+                return cachedImage
             } else {
-              let (data, _) = try await URLSession.shared.data(from: url)
-              if let image = UIImage(data: data) {
-                uiImage = image
-                ImageCache.shared.setImage(url: url, image: image)
-              }
+                let (data, _) = try await URLSession.shared.data(from: url)
+                if let image = UIImage(data: data) {
+                    ImageCache.shared.setImage(url: url, image: image)
+                    return image
+                } else {
+                    return nil
+                }
             }
-          } catch {
-              throw error
-          }
-        
-        return uiImage
+        } catch {
+            throw error
+        }
     }
 }

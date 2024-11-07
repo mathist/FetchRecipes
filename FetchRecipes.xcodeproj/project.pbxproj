@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A30836AB2CDD53E300D37F74 /* ReadMe.md in Resources */ = {isa = PBXBuildFile; fileRef = A30836AA2CDD53DF00D37F74 /* ReadMe.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		A30836632CDD30DD00D37F74 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		A308364C2CDD30DB00D37F74 /* FetchRecipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FetchRecipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A30836622CDD30DD00D37F74 /* FetchRecipesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FetchRecipesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A308366C2CDD30DE00D37F74 /* FetchRecipesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FetchRecipesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A30836AA2CDD53DF00D37F74 /* ReadMe.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReadMe.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -88,6 +93,7 @@
 		A30836432CDD30DB00D37F74 = {
 			isa = PBXGroup;
 			children = (
+				A30836AA2CDD53DF00D37F74 /* ReadMe.md */,
 				A308364E2CDD30DB00D37F74 /* FetchRecipes */,
 				A30836652CDD30DD00D37F74 /* FetchRecipesTests */,
 				A308366F2CDD30DE00D37F74 /* FetchRecipesUITests */,
@@ -225,6 +231,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A30836AB2CDD53E300D37F74 /* ReadMe.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

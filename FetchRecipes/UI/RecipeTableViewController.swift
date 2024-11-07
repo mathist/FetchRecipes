@@ -1,10 +1,3 @@
-//
-//  RecipeTableViewController.swift
-//  FetchRecipes
-//
-//  Created by Todd Mathison on 11/7/24.
-//
-
 import UIKit
 
 class RecipeTableViewController: UITableViewController {
@@ -12,11 +5,32 @@ class RecipeTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.refreshControl?.addTarget(self, action: #selector(refresh(sender:)), for: .valueChanged)
+        
         Task {
-            await RecipeController.shared.fetchRecipes()
-            self.tableView.reloadData()
+            await self.loadRecipes()
         }
     }
+    
+    @objc func refresh(sender: UIRefreshControl) {
+        Task {
+            await self.loadRecipes()
+            self.refreshControl?.endRefreshing()
+            print("Refresh Complete")
+        }
+    }
+    
+    func loadRecipes() async {
+        let result = await RecipeController.shared.fetchRecipes(recipePath: RecipeController.recipesPath)
+        
+        switch result {
+        case .success(_):
+            self.tableView.reloadData()
+        case .failure(let error):
+            print(error)
+        }
+    }
+    
 
     // MARK: - Table view data source
 
