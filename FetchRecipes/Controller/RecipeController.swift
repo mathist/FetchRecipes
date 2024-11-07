@@ -10,6 +10,10 @@ class RecipeController {
     
     var recipes: [Recipe] = []
     
+    private var badURLError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "URL not valid"]) as Error
+    private var jsonError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "JSON not valid"]) as Error
+    private var noRecipesError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "No recipes found"]) as Error
+
     init() {
     }
     
@@ -19,15 +23,20 @@ class RecipeController {
                 let recipeData = try await recipeData(url: url)
                 if let recipes = try parseRecipeData(recipeData: recipeData) {
                     self.recipes = recipes
-                    return .success(self.recipes)
+                    
+                    if !recipes.isEmpty {
+                        return .success(self.recipes)
+                    } else {
+                        return .failure(noRecipesError)
+                    }
                 } else {
-                    return .failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "JSON not valid"]) as Error)
+                    return .failure(jsonError)
                 }
             } catch {
                 return .failure(error)
             }
         } else {
-            return .failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "URL not valid"]) as Error)
+            return .failure(badURLError)
         }
     }
     

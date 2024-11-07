@@ -1,7 +1,9 @@
 import UIKit
 
 class RecipeTableViewController: UITableViewController {
-
+    
+    @IBOutlet weak var lblError: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -25,10 +27,14 @@ class RecipeTableViewController: UITableViewController {
         
         switch result {
         case .success(_):
-            self.tableView.reloadData()
+            lblError.text = nil
         case .failure(let error):
-            print(error)
+            lblError.text = error.localizedDescription
         }
+        
+        self.tableView.reloadData()
+        let height: CGFloat = lblError.text == nil ? 0 : 100.0
+        lblError.frame = CGRect(x: 0, y: 0, width: lblError.frame.size.width, height: height)
     }
     
 
@@ -41,7 +47,7 @@ class RecipeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return RecipeController.shared.recipes.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: RecipeTableViewCell.reuseIdentifier, for: indexPath) as! RecipeTableViewCell
 
