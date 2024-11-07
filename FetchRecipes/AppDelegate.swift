@@ -1,13 +1,6 @@
-//
-//  AppDelegate.swift
-//  FetchRecipes
-//
-//  Created by Todd Mathison on 11/7/24.
-//
-
 import UIKit
 
-@main
+//@main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 

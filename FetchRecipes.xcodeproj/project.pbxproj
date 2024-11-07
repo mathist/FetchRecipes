@@ -38,7 +38,8 @@
 		A30836742CDD30DE00D37F74 /* Exceptions for "FetchRecipes" folder in "FetchRecipes" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				"Info-SwiftUI.plist",
+				"Info-UIKit.plist",
 			);
 			target = A308364B2CDD30DB00D37F74 /* FetchRecipes */;
 		};
@@ -297,7 +298,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FetchRecipes/Info.plist;
+				INFOPLIST_FILE = "FetchRecipes/Info-SwiftUI.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -324,7 +325,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FetchRecipes/Info.plist;
+				INFOPLIST_FILE = "FetchRecipes/Info-SwiftUI.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
