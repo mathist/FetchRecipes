@@ -10,9 +10,9 @@ class RecipeController {
     
     var recipes: [Recipe] = []
     
-    private var badURLError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "URL not valid"]) as Error
-    private var jsonError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "JSON not valid"]) as Error
-    private var noRecipesError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "No recipes found"]) as Error
+    var badURLError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "URL not valid"]) as Error
+    var jsonError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "JSON not valid"]) as Error
+    var noRecipesError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "No recipes found"]) as Error
 
     init() {
     }

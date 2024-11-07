@@ -3,6 +3,7 @@ import UIKit
 class RecipeTableViewController: UITableViewController {
     
     @IBOutlet weak var lblError: UILabel!
+    var currentPath: String = RecipeController.recipesPath
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -10,31 +11,49 @@ class RecipeTableViewController: UITableViewController {
         self.refreshControl?.addTarget(self, action: #selector(refresh(sender:)), for: .valueChanged)
         
         Task {
-            await self.loadRecipes()
+            await self.loadRecipes(path: self.currentPath)
         }
     }
     
     @objc func refresh(sender: UIRefreshControl) {
         Task {
-            await self.loadRecipes()
+            await self.loadRecipes(path: self.currentPath)
             self.refreshControl?.endRefreshing()
             print("Refresh Complete")
         }
     }
     
-    func loadRecipes() async {
-        let result = await RecipeController.shared.fetchRecipes(recipePath: RecipeController.recipesPath)
+    func loadRecipes(path: String) async {
+        let result = await RecipeController.shared.fetchRecipes(recipePath: path)
         
         switch result {
         case .success(_):
             lblError.text = nil
+            lblError.isHidden = true
         case .failure(let error):
             lblError.text = error.localizedDescription
+            lblError.isHidden = false
         }
         
         self.tableView.reloadData()
-        let height: CGFloat = lblError.text == nil ? 0 : 100.0
-        lblError.frame = CGRect(x: 0, y: 0, width: lblError.frame.size.width, height: height)
+        let height: CGFloat = lblError.isHidden ? 52 : 100.0
+        self.tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: lblError.frame.size.width, height: height)
+    }
+    
+    @IBAction func changeRecipeData(sender: UISegmentedControl) {
+        
+        switch sender.selectedSegmentIndex {
+        case 1:
+            currentPath = RecipeController.emptyRecipePath
+        case 2:
+            currentPath = RecipeController.malformedRecipePath
+        default:
+            currentPath = RecipeController.recipesPath
+        }
+        
+        Task {
+            await self.loadRecipes(path: self.currentPath)
+        }
     }
     
 
