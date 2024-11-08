@@ -1,29 +1,35 @@
 import Foundation
 import UIKit
 
-class RecipeController {
+class RecipeController: ObservableObject {
     
     static let shared = RecipeController()
     static let recipesPath: String = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes.json"
     static let malformedRecipePath: String = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes-malformed.json"
     static let emptyRecipePath: String = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes-empty.json"
     
-    var recipes: [Recipe] = []
+    @Published var recipes = [Recipe]()
     
     var badURLError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "URL not valid"]) as Error
     var jsonError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "JSON not valid"]) as Error
     var noRecipesError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "No recipes found"]) as Error
 
-    init() {
+    init(path: String? = nil) {
+        
+        if let path = path {
+            Task {
+                await self.fetchRecipes(recipePath: path)
+            }
+        }
     }
     
+    @MainActor
     func fetchRecipes(recipePath: String) async -> Result<[Recipe], Error> {
         if let url = URL(string: recipePath) {
             do {
                 let recipeData = try await recipeData(url: url)
                 if let recipes = try parseRecipeData(recipeData: recipeData) {
                     self.recipes = recipes
-                    
                     if !recipes.isEmpty {
                         return .success(self.recipes)
                     } else {
