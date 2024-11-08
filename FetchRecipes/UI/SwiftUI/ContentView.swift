@@ -3,7 +3,7 @@ import SwiftUI
 struct ContentView: View {
     
     @ObservedObject var recipeController: RecipeController
-    @State var recipeType: Int = 0
+    @State var recipePath: String = RecipeController.recipesPath
     @State var errorMessage: String? = nil
     
     init() {
@@ -12,22 +12,16 @@ struct ContentView: View {
     
     var body: some View {
         VStack(spacing: 4) {
-            Picker("", selection: $recipeType) {
-                Text("Recipes").tag(0)
-                Text("Empty").tag(1)
-                Text("Bad Data").tag(2)
+            Picker("", selection: $recipePath) {
+                Text("Recipes").tag(RecipeController.recipesPath)
+                Text("Empty").tag(RecipeController.emptyRecipePath)
+                Text("Bad Data").tag(RecipeController.malformedRecipePath)
             }
             .pickerStyle(.segmented)
-            .onChange(of: recipeType) {
+            .onChange(of: recipePath) {
                 
-                var path: String = ""
-                
-                if recipeType == 0 {path = RecipeController.recipesPath}
-                if recipeType == 1 {path = RecipeController.emptyRecipePath}
-                if recipeType == 2 {path = RecipeController.malformedRecipePath}
-
                 Task {
-                    let result = await recipeController.fetchRecipes(recipePath: path)
+                    let result = await recipeController.fetchRecipes(recipePath: recipePath)
                     
                     switch result {
                     case .success(_):
