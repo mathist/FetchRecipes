@@ -19,17 +19,7 @@ struct ContentView: View {
             }
             .pickerStyle(.segmented)
             .onChange(of: recipePath) {
-                
-                Task {
-                    let result = await recipeController.fetchRecipes(recipePath: recipePath)
-                    
-                    switch result {
-                    case .success(_):
-                        errorMessage = nil
-                    case .failure(let error):
-                        errorMessage = error.localizedDescription
-                    }
-                }
+                refresh()
             }
             
             if let errorMessage = errorMessage {
@@ -55,8 +45,25 @@ struct ContentView: View {
                         }
                     }
                 }
+                .refreshable {
+                    refresh()
+                }
             }
         }
         .padding(8)
+    }
+    
+    func refresh() {
+        Task {
+            let result = await recipeController.fetchRecipes(recipePath: recipePath)
+            
+            switch result {
+            case .success(_):
+                errorMessage = nil
+            case .failure(let error):
+                errorMessage = error.localizedDescription
+            }
+        }
+
     }
 }
