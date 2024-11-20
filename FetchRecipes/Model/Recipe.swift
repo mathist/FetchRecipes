@@ -51,4 +51,4 @@ struct RecipeData: Codable {
         return Data(jsonString.utf8)
     }
     
-}
+}       
